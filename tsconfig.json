@@ -2,5 +2,15 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./apps/english-app"
+    },
+    {
+      "path": "./packages/ui"
+    }
+  ],
+  "paths": {
+    "@ui-sdk/*": ["packages/ui/src/*"]
+  }
 }

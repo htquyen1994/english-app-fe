@@ -1,109 +1,180 @@
-# FrontendWorkspace
+# English App — Frontend Workspace
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Monorepo quản lý bằng **Nx 22**, chứa Next.js app và shared packages cho dự án English Vocabulary App.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Tech Stack
 
-## Generate a library
+| Công nghệ | Version | Vai trò |
+|---|---|---|
+| Nx | 22.6.x | Monorepo tool, task runner |
+| Next.js | 16.x (App Router) | Framework chính |
+| TypeScript | 5.9.x | Type-safe code |
+| TanStack Query | v5 | Server state / data fetching |
+| Zustand | v5 | Client state management |
+| React Hook Form | v7 | Form management |
+| Zod | v4 | Schema validation |
+
+---
+
+## Cấu trúc project
+
+```
+frontend-workspace/
+├── apps/
+│   └── english-app/          ← Next.js 16 App Router
+│       └── src/app/          ← App Router pages & layouts
+├── packages/                 ← Shared libraries (publishable)
+├── nx.json                   ← Nx workspace config
+├── package.json              ← Root dependencies
+└── tsconfig.base.json        ← Shared TypeScript paths
+```
+
+---
+
+## Yêu cầu môi trường
+
+- **Node.js** ≥ 20.x ([download](https://nodejs.org))
+- **npm** ≥ 10.x (đi kèm Node)
+
+Kiểm tra:
+```sh
+node -v   # v20.x.x hoặc cao hơn
+npm -v    # 10.x.x hoặc cao hơn
+```
+
+---
+
+## Setup từ đầu (Scratch)
+
+### 1. Clone repo và cài dependencies
 
 ```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+git clone <repo-url>
+cd frontend-workspace
+npm install
 ```
 
-## Run tasks
-
-To build the library use:
+### 2. Chạy Next.js app ở dev mode
 
 ```sh
-npx nx build pkg1
+npx nx dev english-app
 ```
 
-To run any task with Nx use:
+Mở trình duyệt: **http://localhost:3000**
+
+---
+
+## Tạo workspace mới từ đầu (nếu chưa có)
+
+> Dùng khi muốn setup lại hoàn toàn từ con số 0.
 
 ```sh
-npx nx <target> <project-name>
+# Bước 1: Tạo Nx workspace chỉ với @nx/js (no app)
+npx create-nx-workspace@latest frontend-workspace \
+  --preset=ts \
+  --nxCloud=skip
+
+cd frontend-workspace
+
+# Bước 2: Cài plugin Next.js (phải cùng version với nx)
+npm install --save-dev @nx/next@$(node -e "console.log(require('./package.json').devDependencies.nx)")
+
+# Bước 3: Generate Next.js app vào thư mục apps/
+npx nx g @nx/next:app apps/english-app \
+  --style=css \
+  --src=true \
+  --appDir=true \
+  --unitTestRunner=none \
+  --e2eTestRunner=none \
+  --no-interactive
+
+# Bước 4: Cài tech stack
+npm install @tanstack/react-query@5 zustand react-hook-form zod @hookform/resolvers
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+---
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Nx Commands thường dùng
 
-## Versioning and releasing
+### Chạy app
 
-To version and release the library use
+```sh
+# Dev server (hot reload)
+npx nx dev english-app
 
+# Build production
+npx nx build english-app
+
+# Start production server (cần build trước)
+npx nx start english-app
 ```
-npx nx release
+
+### Quản lý project
+
+```sh
+# Xem tất cả projects trong workspace
+npx nx show projects
+
+# Xem chi tiết targets của 1 project
+npx nx show project english-app
+
+# Visualize dependency graph
+npx nx graph
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+### Tạo shared library (packages/)
 
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```sh
+# Tạo publishable TypeScript library
+npx nx g @nx/js:lib packages/ui-components \
+  --publishable \
+  --importPath=@english-app/ui-components
 
-## Keep TypeScript project references up to date
+# Build library
+npx nx build ui-components
+```
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+### Nx caching (tăng tốc build)
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+```sh
+# Xóa cache local
+npx nx reset
 
+# Chạy lại task bỏ qua cache
+npx nx build english-app --skip-nx-cache
+```
+
+---
+
+## Thêm dependencies cho 1 app cụ thể
+
+Khi cài package chỉ dùng cho `english-app`:
+
+```sh
+# Cài vào root (recommended với Nx monorepo)
+npm install <package-name>
+
+# Hoặc cài riêng vào app (nếu muốn isolate)
+cd apps/english-app && npm install <package-name>
+```
+
+---
+
+## Troubleshooting
+
+**Lỗi: `Cannot find module '@nx/next'`**
+```sh
+npm install --save-dev @nx/next@$(node -e "console.log(require('./package.json').devDependencies.nx)")
+```
+
+**Lỗi port 3000 đã dùng**
+```sh
+npx nx dev english-app -- --port 3001
+```
+
+**TypeScript paths không hoạt động**
 ```sh
 npx nx sync
 ```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
