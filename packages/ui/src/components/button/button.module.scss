@@ -1,0 +1,189 @@
+@use '../../styles/variables' as *;
+
+// ============================================================
+// Button Component — SCSS Modules
+// Dùng SCSS nesting để group hover/active/disabled states
+// ============================================================
+
+// --- Mixin: variant shorthand ---
+// Giảm lặp code cho mỗi color variant
+@mixin button-variant($bg, $border, $hover-bg, $hover-border, $active-bg) {
+    background-color: $bg;
+    border-color: $border;
+
+    &:hover:not(:disabled) {
+        background-color: $hover-bg;
+        border-color: $hover-border;
+    }
+
+    &:active:not(:disabled) {
+        background-color: $active-bg;
+    }
+}
+
+// ============================================================
+// BASE
+// ============================================================
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: $radius-md;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        border-color $transition-fast,
+        color $transition-fast,
+        opacity $transition-fast,
+        box-shadow $transition-fast;
+    outline: none;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+
+    // Focus ring — accessibility: chỉ hiện khi dùng keyboard
+    &:focus-visible {
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.35);
+    }
+
+    // Disabled state
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+}
+
+// ============================================================
+// SIZES
+// ============================================================
+
+.sm {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+}
+
+.md {
+    padding: 0.5625rem 1.125rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+}
+
+.lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+// ============================================================
+// VARIANTS — dùng mixin để DRY
+// ============================================================
+
+.primary {
+    color: $color-white;
+
+    @include button-variant(
+        $color-primary,
+        $color-primary,
+        $color-primary-dark,
+        $color-primary-dark,
+        $color-primary-darker
+    );
+}
+
+.secondary {
+    color: $color-gray-800;
+
+    @include button-variant(
+        $color-gray-100,
+        $color-gray-200,
+        $color-gray-200,
+        $color-gray-300,
+        $color-gray-300
+    );
+}
+
+.outline {
+    color: $color-primary;
+    background-color: transparent;
+
+    &:hover:not(:disabled) {
+        background-color: $color-primary-light;
+        border-color: $color-primary;
+    }
+
+    &:active:not(:disabled) {
+        background-color: $color-primary-lighter;
+    }
+
+    border-color: $color-primary;
+}
+
+.ghost {
+    color: $color-gray-700;
+    background-color: transparent;
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+        background-color: #f3f4f6;
+    }
+
+    &:active:not(:disabled) {
+        background-color: #e5e7eb;
+    }
+}
+
+.danger {
+    color: $color-white;
+
+    @include button-variant(
+        $color-danger,
+        $color-danger,
+        $color-danger-dark,
+        $color-danger-dark,
+        $color-danger-darker
+    );
+}
+
+// ============================================================
+// LOADING STATE
+// ============================================================
+
+.loading {
+    cursor: wait;
+    opacity: 0.8;
+}
+
+.spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ============================================================
+// ICON WRAPPER
+// ============================================================
+
+.iconWrapper {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}

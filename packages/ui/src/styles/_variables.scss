@@ -1,0 +1,35 @@
+// ============================================================
+// DESIGN TOKENS — packages/ui
+// Dùng riêng cho component library, độc lập với app
+// ============================================================
+
+// --- Brand Colors ---
+$color-primary: #2563eb;
+$color-primary-dark: #1d4ed8;
+$color-primary-darker: #1e40af;
+$color-primary-light: #eff6ff;
+$color-primary-lighter: #dbeafe;
+
+// --- Neutral ---
+$color-white: #ffffff;
+$color-gray-100: #f1f5f9;
+$color-gray-200: #e2e8f0;
+$color-gray-300: #cbd5e1;
+$color-gray-500: #64748b;
+$color-gray-700: #374151;
+$color-gray-800: #1e293b;
+
+// --- Semantic ---
+$color-danger: #dc2626;
+$color-danger-dark: #b91c1c;
+$color-danger-darker: #991b1b;
+
+// --- Spacing ---
+$spacing-1: 0.25rem;
+$spacing-2: 0.5rem;
+
+// --- Border radius ---
+$radius-md: 0.5rem;
+
+// --- Transitions ---
+$transition-fast: 0.15s ease;

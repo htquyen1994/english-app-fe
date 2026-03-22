@@ -1,0 +1,57 @@
+// ============================================================
+// MIXINS — Reusable style patterns
+// ============================================================
+
+@use 'variables' as *;
+
+// Responsive breakpoint mixin
+// Dùng: @include respond-to(md) { ... }
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == sm {
+        @media screen and (min-width: #{$breakpoint-sm}) {
+            @content;
+        }
+    } @else if $breakpoint == md {
+        @media screen and (min-width: #{$breakpoint-md}) {
+            @content;
+        }
+    } @else if $breakpoint == lg {
+        @media screen and (min-width: #{$breakpoint-lg}) {
+            @content;
+        }
+    } @else if $breakpoint == xl {
+        @media screen and (min-width: #{$breakpoint-xl}) {
+            @content;
+        }
+    }
+}
+
+// Flex center mixin
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Text truncate (single line)
+@mixin truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// Focus ring — accessibility
+@mixin focus-ring($color: $color-primary) {
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba($color, 0.35);
+    }
+}
+
+// Card base style
+@mixin card {
+    background: $color-white;
+    border: 1px solid $color-gray-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-sm;
+}

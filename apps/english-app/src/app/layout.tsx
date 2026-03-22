@@ -6,7 +6,7 @@
 // - Providers đặt ở đây áp dụng cho toàn app
 import type { Metadata } from 'next';
 import { QueryProvider } from '../providers/query-provider';
-import './global.css';
+import './global.scss';
 
 // Metadata cho SEO — Next.js tự inject vào <head>
 export const metadata: Metadata = {

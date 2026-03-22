@@ -6,8 +6,8 @@
     "dev": "nx dev english-app",
     "build": "nx build english-app",
     "start": "nx start english-app",
-    "format": "prettier --write \"apps/**/*.{ts,tsx,css}\" \"packages/**/*.{ts,tsx,css}\"",
-    "format:check": "prettier --check \"apps/**/*.{ts,tsx,css}\" \"packages/**/*.{ts,tsx,css}\"",
+    "format": "prettier --write \"apps/**/*.{ts,tsx,scss}\" \"packages/**/*.{ts,tsx,scss}\"",
+    "format:check": "prettier --check \"apps/**/*.{ts,tsx,scss}\" \"packages/**/*.{ts,tsx,scss}\"",
     "graph": "nx graph"
   },
   "private": true,
@@ -23,6 +23,7 @@
     "@types/react-dom": "^19.0.0",
     "nx": "22.6.1",
     "prettier": "~3.6.2",
+    "sass": "^1.98.0",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "verdaccio": "^6.0.5"

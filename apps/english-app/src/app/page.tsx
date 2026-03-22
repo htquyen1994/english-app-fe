@@ -2,7 +2,7 @@
 // Trang landing, demo Button từ @english-app/ui
 'use client'; // Cần vì dùng onClick (interactivity) → phải là Client Component
 
-import styles from './page.module.css';
+import styles from './page.module.scss';
 
 export default function HomePage() {
     return (

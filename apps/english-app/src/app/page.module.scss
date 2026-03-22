@@ -1,0 +1,96 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.main {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 60%);
+    padding: $spacing-12 $spacing-4;
+}
+
+.container {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+// --- Header ---
+.header {
+    text-align: center;
+    margin-bottom: $spacing-12;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $color-gray-900;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin: 0 0 $spacing-4;
+}
+
+.subtitle {
+    font-size: $font-size-lg;
+    color: $color-gray-500;
+    margin: 0;
+}
+
+// --- Section ---
+.section {
+    @include card;
+
+    padding: $spacing-8;
+    margin-bottom: $spacing-8;
+}
+
+.sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $color-gray-800;
+    margin: 0 0 0.375rem;
+
+    code {
+        font-size: 0.9em;
+        background: $color-gray-100;
+        padding: 0.125rem 0.375rem;
+        border-radius: $radius-sm;
+        color: $color-primary;
+    }
+}
+
+.sectionDesc {
+    font-size: $font-size-sm;
+    color: $color-gray-400;
+    margin: 0 0 $spacing-8;
+}
+
+// --- Group ---
+.group {
+    margin-bottom: 1.75rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.groupLabel {
+    font-size: $font-size-xs;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $color-gray-400;
+    margin: 0 0 $spacing-3;
+}
+
+.buttonRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-3;
+    align-items: flex-start;
+}
+
+// --- CTA ---
+.cta {
+    display: flex;
+    gap: $spacing-4;
+    justify-content: center;
+    padding-top: $spacing-4;
+}
